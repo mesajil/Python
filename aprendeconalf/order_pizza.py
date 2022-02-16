@@ -41,12 +41,11 @@ def get_ingredient (is_veg_pizza):
 
 def print_order (is_veg_pizza, ingredient):
     print()
-    line = "=" * 60
-    print (line)
+    print ("=" * 60)
     print ("\tThank you!, your order is being prepared.")
     print ("\tVegetable pizza: ", "YES" if is_veg_pizza else "NO")
     print ("\tIgridients: Mozzarella, tomate and ", ingredient)
-    print (line)
+    print ("=" * 60)
 
 
 
