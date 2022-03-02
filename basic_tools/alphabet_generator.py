@@ -14,7 +14,7 @@ import string
 
 
 def get_str ():
-    str = string.ascii_lowercase
+    str = string.ascii_uppercase
     sep = "\n"
     return sep.join(list(str))
 
