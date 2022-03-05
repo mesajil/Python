@@ -1,10 +1,14 @@
 
 
 """
-Examples
 
-Generar a,b,c, ...
-Generar A\nB\nC\n ...
+Inputs:
+
+
+Examples outputs
+
+a,b,c, ...
+A\nB\nC\n ...
 
 
 
