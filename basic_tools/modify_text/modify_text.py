@@ -2,30 +2,41 @@
 Functions:
 
 Modify text: a,b,c -> 1. a, 2. b, 3. c
-sort list: a,c,b -> a,b,c
 get list of words: hello world -> hello, world
 delete repeats: a b b c -> a b c
-get_case_list: a b c -> A B C
-
-
 
 """
 
 def get_case_list (l, func):
+    """
+    a -> A
+    """
     return [func(line) for line in l]
 
+def get_words_list (lines):
+    """
+    Hello World ->  Hello
+                    World
+    """
+    text = "".join(lines)
+    return [word + "\n" for word in text.split()]
 
-def get_lines (name):
-    f = open (name, "r", encoding="utf8")
-    lines = [line for line in f]
-    f.close()
-    return lines
 
 
-def get_sub_list(lines):
-    index = 0
-    sep = "."
-    return [(line.split(sep))[index] + "\n" for line in lines] 
+def get_modified_list(lines):
+    """
+    a, b, c -> a
+    a -> a: 
+    """
+    #l = [(line.split(" "))[1] for line in lines]
+    l = [line.replace("\n",": \n") for line in lines]
+    return l
+
+
+def get_sort_list(l):
+    aux = l[:]
+    aux.sort()
+    return aux
 
 def print_list (l):
     [print(str(e)) for e in l]
@@ -35,19 +46,31 @@ def get_output_file (name, lines):
     f.writelines(lines)
     f.close()
 
-def get_sort_list(l):
-    aux = l[:]
-    aux.sort()
-    return aux
+def get_lines (name):
+    f = open (name, "r", encoding="utf8")
+    lines = [line for line in f]
+    f.close()
+    return lines
+
+def get_word_list_from_lyrics (lines):
+    """
+    A,B,C -> a,a,b,c ->     a   ->  a
+                            a       b
+                            b       c
+                            c
+
+    """
+    output = get_case_list(lines, str.lower)
+    output = get_words_list (output)
+    output = list(set(output))
+    return get_sort_list(output)
 
 if __name__ == '__main__':
     inputname = "input.txt"
     outputname = "output.txt"
     
     lines = get_lines (inputname)
-    #print_list(lines)
-    output = get_case_list(lines, str.lower)
-    output = get_sort_list(output)
+    output = get_modified_list(lines)
     get_output_file (outputname, output)
 
     
