@@ -8,17 +8,16 @@ que el usuario introduzca hasta que el usuario escriba
 
 
 
-def echo ():
-    while (True):
+def solve ():
+    word = ""
+    while (word != "salir"):
         word = input ("Ingrese palabra: ")
-        if word == "salir":
-            print ("Fin del programa")
-            break
-        print (word)
-
+        if (word != "salir"):
+            print (word)
+    print ("Fin del programa")
 
 
 
 if __name__ == '__main__':
-    echo()
+    solve()
 
