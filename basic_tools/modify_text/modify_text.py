@@ -29,7 +29,8 @@ def get_modified_list(lines):
     a -> a: 
     """
     #l = [(line.split(" "))[1] for line in lines]
-    l = [line.replace("\n",": \n") for line in lines]
+    l = [line.replace(" ","\t") for line in lines]
+    #l = [line.replace("  "," ") for line in lines]
     return l
 
 
