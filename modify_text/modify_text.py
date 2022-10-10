@@ -28,9 +28,9 @@ def get_modified_list(lines):
     a, b, c -> a
     a -> a: 
     """
-    #l = [(line.split(" "))[1] for line in lines]
-    l = [line.replace(" ","\t") for line in lines]
-    #l = [line.replace("  "," ") for line in lines]
+    #l = [(line.split(" "))[1] for line in lines] #
+    l = [line.replace(" ","\t") for line in lines] # Change separator of 
+
     return l
 
 
@@ -47,8 +47,11 @@ def get_output_file (name, lines):
     f.writelines(lines)
     f.close()
 
-def get_lines (name):
-    f = open (name, "r", encoding="utf8")
+def get_lines (file):
+    '''
+    Return a list of lines from a file
+    '''
+    f = open (file, "r", encoding="utf8")
     lines = [line for line in f]
     f.close()
     return lines
@@ -67,11 +70,11 @@ def get_word_list_from_lyrics (lines):
     return get_sort_list(output)
 
 if __name__ == '__main__':
-    inputname = "input.txt"
-    outputname = "output.txt"
+    INPUT_NAME = "song.txt"
+    OUTPUT_NAME = "output.txt"
     
-    lines = get_lines (inputname)
+    lines = get_lines (INPUT_NAME)
     output = get_modified_list(lines)
-    get_output_file (outputname, output)
+    get_output_file (OUTPUT_NAME, output)
 
     
