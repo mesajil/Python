@@ -1,4 +1,27 @@
-def obtener_palabra_a_adivinar ():
+def fase_configuracion ():
+    
+    nombre1 = input("Ingrese nombre del jugador 1: ")
+    nombre2 = input("Ingrese nombre del jugador 2: ")
+    num_palabras = int (input ("Ingrese cantidad de palabras a adivinar por jugador: "))
+    max_intentos = int (input ("Ingrese cantidad maxima de intentos para adivinar cada palabra: "))
+
+    return nombre1, nombre2, num_palabras, max_intentos
+
+def fase_proposicion_adivininacion (nombre1, nombre2, num_palabras, max_intentos):
+
+    for _ in range(num_palabras):
+
+        palabra = proponer_palabra (nombre1)
+        puntaje2 = adivinar_palabra (nombre2, palabra, max_intentos)
+        palabra = proponer_palabra (nombre2)
+        puntaje1 = adivinar_palabra (nombre1, palabra, max_intentos)
+    
+    return puntaje1, puntaje2
+
+
+def proponer_palabra (nombre):
+
+    print ("\nAhora juega Proponedor:", nombre)
 
     for _ in range(3):
         palabra = input ("Ingrese palabra a adivinar: ")
@@ -29,71 +52,49 @@ def obtener_palabra_a_adivinar ():
     return 0
 
 
-def adivinar_palabra (palabra, max_intentos):
+def adivinar_palabra (nombre, palabra, max_intentos):
 
-    letras_unicas = set(palabra)
-    letras_encontradas = set()
+    print ("\nAhora juega Adivinador: ", nombre)
+
+    letras_a_adivinar = set(palabra)
+    letras_adivinadas = set()
 
     for i in range(max_intentos):
 
         letra = (input("Ingrese letra: "))[0]
 
-        # Econtrar posiciones de letra en palabra
+        # Mostrar posiciones
 
         if (letra in palabra):
-            posiciones = encontrar_posiciones(letra, palabra)
-        
-        # Retornar puntaje si se adivinó la palabra
+            letras_adivinadas.update(letra)
+            posiciones = []
+            for p in range(len(palabra)):
+                if (letra == palabra[p]):
+                    posiciones.append(str(p + 1))
 
-        if (len(letras_encontradas) == len(letras_unicas)):
-            # Retorna puntaje
+            print ("La letra se encontro en las posiciones: " + ", ".join(posiciones))
+        else:
+            print ("No se encontro la letra en la palabra a adivinar.")
+        
+        # Retornar puntaje
+
+        if (len(letras_a_adivinar) == len(letras_adivinadas)):
+            return (1 - (i + 1) / max_intentos) * len(palabra)
     
     return 0
 
+def fase_cierre (puntaje1, puntaje2):
+
+    if (puntaje1 < 0):
+        pass
+
+
 if __name__ == '__main__':
-    
-    # Fase de configuración
 
     print ("BIENVENIDO AL JUEGO DE ADIVINA - PALABRA\n")
-    nombre1 = input("Ingrese nombre del jugador 1: ")
-    nombre2 = input("Ingrese nombre del jugador 2: ")
-    num_palabras = int (input ("Ingrese cantidad de palabras a adivinar por jugador: "))
-    max_intentos = int (input ("Ingrese cantidad máxima de intentos para adivinar cada palabra: "))
-
-    # Fase de Proposición-Adivinación
-
-    for _ in range(num_palabras):
-        
-        # Turno proponedor jugador 1
-        
-        print ("\nAhora juega Proponedor:", nombre1)
-
-        palabra = obtener_palabra_a_adivinar()
-
-        # ¿Jugador 1 perdio el juego?
-
-        if (palabra == 0):
-            break
-
-        # Turno adivinador jugador 2
-
-        print ("\nAhora juega Adivinador:", nombre2)
-
-        # Turno proponedor jugador 2
-        
-        print ("\nAhora juega Proponedor:", nombre2)
-
-        palabra = obtener_palabra_a_adivinar()
-
-        # ¿Jugador 2 perdio el juego?
-
-        if (palabra == 0):
-            break
-
-        # Turno adivinador jugador 2
-
-        print ("\nAhora juega Adivinador:", nombre1)
-
+    nombre1, nombre2, num_palabras, max_intentos = fase_configuracion ()
+    puntaje1, puntaje2 = fase_proposicion_adivininacion (nombre1, nombre2, num_palabras, max_intentos)
+    fase_cierre (puntaje1, puntaje2)
     
 
     
