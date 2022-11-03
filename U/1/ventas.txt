@@ -1,0 +1,3 @@
+L,M,F,Santiago,Concepción,5,5
+C,M,F,Valdivia,Osorno,F,H
+B,M,5,Santiago,Puerto Montt,1,1
