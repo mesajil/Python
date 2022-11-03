@@ -34,7 +34,7 @@ def menu ():
     return input("Ingrese opción: ")
 
 
-def vender_pasaje():
+def crear_venta():
     
     # Leer ciudades.txt
 
@@ -93,6 +93,6 @@ def leer_ventas():
 if __name__ == "__main__":
     while (1):
         opcion = menu()
-        if opcion == "1": vender_pasaje()
+        if opcion == "1": crear_venta()
         elif opcion == "2": reporte() 
         elif opcion == "3": break
