@@ -1,20 +1,24 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 import random
+import os
 
-def Piloto:
+random.seed(135711)
+
+
+class Piloto:
     def __init__ (self, nombre, edad):
         self.nombre = nombre
         self.edad = edad
 
 
-def Equipo:
+class Equipo:
     def __init__ (self, nombre, pilotos):
         self.nombre = nombre
         self.pilotos = pilotos
 
 
-def Eventos:
+class Evento:
     def __init__ (self, short_name, record_time, estimate_time, qualy_laps):
         self.short_name = short_name
         self.record_time = record_time
@@ -23,15 +27,14 @@ def Eventos:
 
 
 def leer_archivos ():
-    tracks = pd.read_csv('tracks.csv')
-    equipos = pd.read_csv('equipos.csv')
-    return tracks, equipos
+    return leer_equipos (), leer_eventos()
 
 
-def crear_equipos (dfequipos):
+def leer_equipos ():
+    df = pd.read_csv('equipos.csv')
     equipos = []
-    competidores = int(len(dfequipos.columns.values)/2) # Numero de competidores por equipo
-    for _, row in dfequipos.iterrows():
+    competidores = int(len(df.columns.values)/2) # Numero de competidores por equipo
+    for _, row in df.iterrows():
         pilotos = [] # Pilotos por equipo
         for i in range(competidores):
             nombre = row[f'piloto{i + 1}']
@@ -42,9 +45,10 @@ def crear_equipos (dfequipos):
     return equipos
 
 
-def leer_eventos (dftracks):
+def leer_eventos ():
+    df = pd.read_csv('tracks.csv')
     eventos = []
-    for _, row in dftracks.iterrows():
+    for _, row in df.iterrows():
         sname = row['Short_Name']
         rtime = row['Record_Time']
         etime = row['Estimate_Time']
@@ -53,21 +57,55 @@ def leer_eventos (dftracks):
     return eventos
 
 
-def generar_csv (equipos, eventos):
-    for ev in eventos:
-        rows = [] # 
-        for eq in equipos:
-            for p in eq:
-                rows.append([p.nombre, eq.nombre] + p.resultados[ev.short_name])
-        
-        header = ["piloto", "equipo"] + [f"L{i + 1}" for i in range(ev.qualy_laps)]
-        path = f"resultado_{ev.short_name}.csv"
-        pd.DataFrame (data, columns = header).to_csv(path)
+def simular_vueltas(evento):
+    vueltas = []
+    for _ in range(evento.qualy_laps):
+        random.seed(random.random())
+        t = random.uniform(evento.estimate_time, evento.record_time)
+        vueltas.append(round(t,2))
+    return vueltas
 
+
+def generar_csv (equipos, eventos):
+    try: os.mkdir(r"resultados/")
+    except FileExistsError: print ('Directory not created.')
+
+    for ev in eventos:
+        rows = []
+        for eq in equipos:
+            for p in eq.pilotos:
+                rows.append([p.nombre, eq.nombre] + simular_vueltas(ev))
+        
+        path = rf"resultados/resultado_{ev.short_name}.csv"
+        header = ["piloto", "equipo"] + [f"L{i + 1}" for i in range(ev.qualy_laps)]
+        pd.DataFrame (rows, columns = header).to_csv(path)
+
+
+def leer_tiempos (eventos):
+    dicc = {}
+    for ev in eventos:
+        path = rf'resultados/resultado_{ev.short_name}.csv'
+        df = pd.read_csv(path)
+        for _, row in df.iterrows():
+            if row['piloto'] not in dicc:
+                dicc[row['piloto']] = [row[-1]]
+            else:
+                dicc[row['piloto']].append(row[-1])
+    return dicc
+
+
+def generar_grafico (eventos):
+    dicc = leer_tiempos (eventos)
+    short_names = [ev.short_name for ev in eventos]
+
+    for nombre, resultados in dicc.items():
+        plt.plot(short_names, resultados, label = nombre)
+
+    plt.legend()
+    plt.show()
 
 
 if __name__ == "__main__":
-    dftracks, dfequipos = leer_archivos()
-    equipos = leer_equipos (dfequipos)
-    eventos = leer_eventos (dftracks)
+    equipos, eventos = leer_archivos()
     generar_csv(equipos, eventos)
+    generar_grafico(eventos)
