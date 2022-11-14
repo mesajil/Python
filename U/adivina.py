@@ -47,25 +47,20 @@ def adivinar_palabra (nombre, palabra, intentos):
 
     print ("\nAhora juega Adivinador: ", nombre)
 
-    letras_a_adivinar = set(palabra)
-    letras_adivinadas = set()
+    adivinadas = set()
 
     for i in range(intentos):
 
         letra = (input("Ingrese letra: "))[0]
-
-        # Mostrar posiciones
-
-        if (letra in palabra):
-            letras_adivinadas.update(letra)
-            posiciones = [str(p + 1) for p in range(len(palabra)) if letra == palabra[p]]
-            print ("La letra se encontro en las posiciones: " + ", ".join(posiciones))
-        else:
-            print ("No se encontro la letra en la palabra a adivinar.")
+        adivinadas.update(set(palabra) & set(letra))
+        posiciones = [str(j + 1) for j in range(len(palabra)) if letra == palabra[j]]
         
-        # Retornar puntaje
-
-        if (len(letras_a_adivinar) == len(letras_adivinadas)):
+        if (len(posiciones) > 0):
+            print (f"Posiciones encontradas: {', '.join(posiciones)}")
+        else:
+            print ("No se encontro la letra en la palabra.")
+        
+        if (set(palabra) == adivinadas):
             return (1 - (i + 1) / intentos) * len(palabra)
     
     return 0
@@ -97,8 +92,7 @@ def main():
 
     data = fase_configuracion ()
     puntaje1, puntaje2 = fase_proposicion_adivininacion (*data)
-    print(puntaje1, puntaje2)
-    nombre1, nombre2, num_palabras, intentos = data
+    nombre1, nombre2, _, _ = data
     fase_cierre (nombre1, nombre2, puntaje1, puntaje2)
 
 
