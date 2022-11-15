@@ -61,39 +61,41 @@ def adivinar_palabra (nombre, palabra, intentos):
             print ("No se encontro la letra en la palabra.")
         
         if (set(palabra) == adivinadas):
-            return (1 - (i + 1) / intentos) * len(palabra)
+            return round((1 - (i + 1) / intentos) * len(palabra), 2)
     
     return 0
 
 
 def fase_cierre (nombre1, nombre2, puntaje1, puntaje2):
 
-    print ()
     if (puntaje1 < 0):
-        print ("GANADOR: ", nombre2)
+        print ("\nGANADOR: ", nombre2)
         print (f"El jugador {nombre1} no logro ingresar una palabra correctamente.")
         return 
+
     elif (puntaje2 < 0):
-        print ("GANADOR: ", nombre1)
+        print ("\nGANADOR: ", nombre1)
         print (f"El jugador {nombre2} no logro ingresar una palabra correctamente.")
         return
-    elif (puntaje1 > puntaje2):
-        print ("GANADOR: ", nombre1)
-    elif (puntaje1 < puntaje2):
-        print ("GANADOR: ", nombre2)
-    else:
-        print ("EMPATE")
 
-    print (f"\nPuntaje de {nombre1}: {round(puntaje1,2)}")
-    print (f"Puntaje de {nombre2}: {round(puntaje2,2)}")
+    elif (puntaje1 > puntaje2):
+        print ("\nGANADOR: ", nombre1)
+
+    elif (puntaje1 < puntaje2):
+        print ("\nGANADOR: ", nombre2)
+        
+    else:
+        print ("\nRESULTADO: EMPATE")
+
+    print (f"\nPuntaje de {nombre1}: {puntaje1}")
+    print (f"Puntaje de {nombre2}: {puntaje2}")
 
 
 def main():
 
-    data = fase_configuracion ()
-    puntaje1, puntaje2 = fase_proposicion_adivininacion (*data)
-    nombre1, nombre2, _, _ = data
-    fase_cierre (nombre1, nombre2, puntaje1, puntaje2)
+    *nombres, num_palabras, intentos = fase_configuracion ()
+    puntajes = fase_proposicion_adivininacion (*nombres, num_palabras, intentos)
+    fase_cierre (*nombres, *puntajes)
 
 
 if __name__ == '__main__':
