@@ -1,10 +1,11 @@
 
-
+import module
 
 
 
 def main():
-    print ('Hello')
+    print(module.pi)
+    print(module.fsum([1,2,3]))
 
 
 if __name__ == '__main__':

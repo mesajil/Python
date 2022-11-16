@@ -2,3 +2,9 @@ L,M,F,Santiago,Concepción,5,5
 C,M,F,Valdivia,Osorno,F,H
 B,M,5,Santiago,Puerto Montt,1,1
 G,G,G,Santiago,Concepción,G,G
+L,M,01,Santiago,Puerto Montt,01,01
+r,r,r,Santiago,Concepción,r,r
+X,X,X,Santiago,Concepción,X,X
+XX,XX,XX,Puerto Montt,Osorno,XX,XX
+GG,GG,g,Valdivia,Osorno,g,g
+a,b,c,Santiago,Concepción,a,b
