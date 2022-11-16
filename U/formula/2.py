@@ -3,8 +3,6 @@ from matplotlib import pyplot as plt
 import random
 import os
 
-random.seed(135711)
-
 
 class Piloto:
     def __init__ (self, nombre, edad):
@@ -33,14 +31,14 @@ def leer_archivos ():
 def leer_equipos ():
     df = pd.read_csv('equipos.csv')
     equipos = []
-    competidores = int(len(df.columns.values)/2) # Numero de competidores por equipo
+    numcompetidores = int(len(df.columns.values)/2)
     for _, row in df.iterrows():
-        pilotos = [] # Pilotos por equipo
-        for i in range(competidores):
+        pilotos = []
+        for i in range(numcompetidores):
             nombre = row[f'piloto{i + 1}']
             edad = row[f'edad_piloto{i + 1}']
             pilotos.append(Piloto(nombre, edad))
-        e = Equipo(row['nombre_equipo'], pilotos) # Creamos nuevo equipo
+        e = Equipo(row['nombre_equipo'], pilotos)
         equipos.append(e)
     return equipos
 
@@ -81,6 +79,17 @@ def generar_csv (equipos, eventos):
         pd.DataFrame (rows, columns = header).to_csv(path)
 
 
+def generar_grafico (eventos):
+    dicc = leer_tiempos (eventos)
+    short_names = [ev.short_name for ev in eventos]
+
+    for nombre, resultados in dicc.items():
+        plt.plot(short_names, resultados, label = nombre)
+
+    plt.legend()
+    plt.show()
+
+
 def leer_tiempos (eventos):
     dicc = {}
     for ev in eventos:
@@ -94,18 +103,12 @@ def leer_tiempos (eventos):
     return dicc
 
 
-def generar_grafico (eventos):
-    dicc = leer_tiempos (eventos)
-    short_names = [ev.short_name for ev in eventos]
-
-    for nombre, resultados in dicc.items():
-        plt.plot(short_names, resultados, label = nombre)
-
-    plt.legend()
-    plt.show()
-
-
-if __name__ == "__main__":
+def main():
+    random.seed(135711)
     equipos, eventos = leer_archivos()
     generar_csv(equipos, eventos)
     generar_grafico(eventos)
+
+
+if __name__ == "__main__":
+    main()
