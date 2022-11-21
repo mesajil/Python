@@ -1,26 +1,23 @@
-def menu ():
-    print("""
-    MENU
+"""
+Solemne 02 Pregunta 1
 
-    [1] Nueva venta de pasaje
-    [2] Reporte de pasajes vendidos
-    [3] Salir del programa
 
-    """)
+"""
 
-    return input("Ingrese opcion: ")
-
+####################################################
+#           Funcion Crear venta
+####################################################
 
 def crear_venta():
     
-    datos = pedir_datos ()
-    with open(r"ventas.txt", "a") as f:
-        f.write(','.join(datos) + '\n')
-
-
-def pedir_datos ():
-    ciudades = leer_ciudades ()
+    # Lectura de datos
+    with open(r"ciudades.txt", "r") as f:
+        ciudades = [line.split("\n")[0] for line in f]
+    
+    # Proceso
     formato = [f"{i+1}:{c}" for i,c in enumerate(ciudades)]
+    
+    # Entradas: nombre, apellido, fechanac, origen, destino, fecha y hora
     nombre = input("Nombre: ")
     apellido = input("Apellido: ")
     fechanac = input("Fecha de nacimiento: ")
@@ -31,22 +28,33 @@ def pedir_datos ():
             break
     fecha = input("Fecha: ")
     hora = input("Hora de salida: ")
-    return nombre, apellido,fechanac,ciudades[origen],ciudades[destino],fecha,hora
+
+    # Escribir datos
+    datos = nombre, apellido,fechanac,ciudades[origen],ciudades[destino],fecha,hora
+    with open(r"ventas.txt", "a") as f:
+        f.write(','.join(datos) + '\n')
 
 
-def leer_ciudades ():
-    with open(r"ciudades.txt", "r") as f:
-        return [c.split("\n")[0] for c in f]
-
+####################################################
+#           Funcion validar origen y destino
+####################################################
 
 def valida_origendestino(origen, destino, ciudades):
-    n = len(ciudades)
-    return origen != destino and origen >= 0 and origen < n and destino >= 0 and destino < n
+    # Salidas
+    return origen in range(len(ciudades)) and destino in range(len(ciudades)) and origen != destino
 
+
+####################################################
+#           Funcion Reporte de pasajes vendidos
+####################################################
 
 def reporte():
 
-    ventas = leer_ventas()
+    # Leer datos
+    with open(r"ventas.txt", "r") as f:
+        ventas = [line.split(",") for line in f]
+    
+    # Salidas
     for v in ventas:
         print(f"""
     Datos del pasajero:
@@ -64,20 +72,40 @@ def reporte():
     """)
 
 
-def leer_ventas():
-
-    with open(r"ventas.txt", "r") as f:
-        return [line.split(",") for line in f]
-
+####################################################
+#           Funcion principal
+####################################################
 
 def main():
+    
+    # Inicializar
+    menu = """
+    MENU
+
+    [1] Nueva venta de pasaje
+    [2] Reporte de pasajes vendidos
+    [3] Salir del programa
+
+        Ingrese opcion: """
+    
     while (1):
-        opcion = menu()
+        
+        # Entradas
+        opcion = input(menu)
+        
+        # Proceso
         match opcion:
             case "1": crear_venta()
             case "2": reporte()
             case "3": break
 
+    # Salida: Fin del programa
+
+
+####################################################
+#           Punto de entrada
+####################################################
 
 if __name__ == "__main__":
     main()
+    # Salida: Fin del programa

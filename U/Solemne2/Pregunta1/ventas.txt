@@ -8,3 +8,6 @@ X,X,X,Santiago,Concepción,X,X
 XX,XX,XX,Puerto Montt,Osorno,XX,XX
 GG,GG,g,Valdivia,Osorno,g,g
 a,b,c,Santiago,Concepción,a,b
+R,R,R,Santiago,Puerto Montt,F,F
+r,r,r,Santiago,Concepción,r,t
+L,M,L,Santiago,Valdivia,L,L
