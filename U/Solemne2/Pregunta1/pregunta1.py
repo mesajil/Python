@@ -17,10 +17,10 @@ def crear_venta():
     # Proceso
     formato = [f"{i+1}:{c}" for i,c in enumerate(ciudades)]
     
-    # Entradas: nombre, apellido, fechanac, origen, destino, fecha y hora
+    # Entradas
     nombre = input("Nombre: ")
     apellido = input("Apellido: ")
-    fechanac = input("Fecha de nacimiento: ")
+    nacimiento = input("Fecha de nacimiento: ")
     while (1):
         origen = int(input(f"Seleccione Ciudad origen: {formato}: ")) - 1
         destino = int(input(f"Seleccione Ciudad destino: {formato}: ")) - 1
@@ -30,7 +30,7 @@ def crear_venta():
     hora = input("Hora de salida: ")
 
     # Escribir datos
-    datos = nombre, apellido,fechanac,ciudades[origen],ciudades[destino],fecha,hora
+    datos = nombre, apellido,nacimiento,ciudades[origen],ciudades[destino],fecha,hora
     with open(r"ventas.txt", "a") as f:
         f.write(','.join(datos) + '\n')
 
@@ -50,7 +50,7 @@ def valida_origendestino(origen, destino, ciudades):
 
 def reporte():
 
-    # Leer datos
+    # Leer datos -> ventas
     with open(r"ventas.txt", "r") as f:
         ventas = [line.split(",") for line in f]
     

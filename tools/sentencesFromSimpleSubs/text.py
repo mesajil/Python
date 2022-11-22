@@ -3,6 +3,7 @@
 def get_data ():
     path = r'subs.txt'
     with open(path, 'r') as f:
+        # Text is the union of every no null line
         text = ' '.join([line.replace('\n', '') for line in f if line != '\n'])
         return text
 
