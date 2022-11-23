@@ -1,3 +1,5 @@
+from os import system
+
 def main():
     menu = """
     MENU
@@ -12,7 +14,9 @@ def main():
     Ingrese la opcion: """
 
     while True:
+        system('clear') # Limpia la pantalla
         opcion = input(menu)
+        system('clear') # Limpia la pantalla
         match opcion:
             case "1": conversion_binariodecimal ()
             case "2": evaluar_numeros()
@@ -20,16 +24,19 @@ def main():
             case "4": juego_preguntas()
             case "5": juego_numeros()
             case "6": break
+            case _: continue
+        input("\nPresione enter para continuar.")
 
 
 def conversion_binariodecimal ():
     binario = int(input("Ingrese numero binario: "))
-    decimal, i = 0, 0
+    decimal = 0 # Inicialmente en 0
+    i = 0 # Exponente
     while(binario != 0):
-        digito = binario % 10 # Ultimo digito de binario
-        decimal += digito * pow(2, i)
-        binario //= 10 # Quitar ultimo digito a binario
-        i += 1
+        digito = binario % 10 # Ultimo digito del numero binario
+        decimal += digito * pow(2, i) # Incrementa decimal
+        binario //= 10 # Quitar ultimo digito al numero binario
+        i += 1 # Incrementa exponente
     print("Decimal:", decimal)
 
 
@@ -39,13 +46,13 @@ def evaluar_numeros ():
     i = 0 # Contador
     while (i < cantidad):
         numero = int(input(f"Ingrese numero {i + 1}: "))
-        numero = str(numero) # La lista sera una lista de strings
+        numero = str(numero) # Los numeros son strings
         if numero not in lista:
             lista.append(numero) # Se agrega numero a la lista 
             i += 1 # Incrementar contador
         else:
             print("El numero es repetido, ingrese otro nuevamente.")
-    print ("Numeros:", ', '.join(lista))
+    print ("Numeros:", ', '.join(lista)) # Los numeros se separan por comas
 
 
 def codificacion_alumno ():
@@ -61,7 +68,7 @@ def codificacion_alumno ():
     codigo += paterno[0] + (paterno[3] if len(paterno) >= 4 else paterno[-1])
     codigo += materno[0] + (materno[3] if len(materno) >= 4 else materno[-1])
     codigo += nombre[0] + ("001" if titular[0] == "1" else "002")
-    print("Codigo de seguro:", codigo)
+    print("\nCodigo de seguro:", codigo)
 
 
 def juego_preguntas():
@@ -69,18 +76,18 @@ def juego_preguntas():
         def __init__ (self, pregunta, alternativas, respuesta):
             self.pregunta = pregunta
             self.alternativas = alternativas # Lista con las alternativas
-            self.respuesta = respuesta # Indice de la lista de alternativas
+            self.respuesta = respuesta # Indice correcto de la lista de alternativas
 
         def obtener_respuesta(self):
-            # Devuelve el elemento de la lista correcto
+            # Devuelve la respuesta correcta
             return self.alternativas[self.respuesta - 1]
     
     print ("Juego de preguntas")
     preguntas = [] # Lista de objetos Pregunta()
     preguntas.append(Pregunta(
-        "Cuantos litros de sangre tiene una persona adulta?",
-        ["Tiene entre 2 y 4 litros", "Tiene entre 4 y 6 litros"],
-        2
+        "Cuantos litros de sangre tiene una persona adulta?", # Pregunta
+        ["Tiene entre 2 y 4 litros", "Tiene entre 4 y 6 litros"], # Lista de alternativas
+        2 # Indice de la respuesta correcta
     ))
     preguntas.append(Pregunta(
         "Quien es el autor de la frase \"Pienso, luego existo\"?",
@@ -140,7 +147,7 @@ def juego_preguntas():
         else:
             print(f"Incorrecto, la respuesta correcta es: {p.obtener_respuesta()}")
     
-    print ("\nResultados:")
+    print ("\nResultados\n")
     print (f"Correctas:     {puntaje}")
     print (f"Incorrectas:   {len(preguntas) - puntaje}")
     
@@ -153,11 +160,41 @@ def juego_preguntas():
     else:
         print ("Nivel Alcanzado: Excelente")
 
-    input("\nPresione enter para continuar.")
-
 
 def juego_numeros ():
-    pass
+    from random import randint
+    print("Juego de numeros\n")
+    apuesta = int(input("Ingrese su monto de apuesta: "))
+    lista = [] # Lista de numeros del usuario
+    i = 0 # Contador
+    while (i < 3):
+        numero = int(input(f"Ingrese numero {i + 1}: "))
+        if numero not in range(1,7): # Verifica que numero no este entre 1 y 6
+            print("El numero debe estar entre 1 y 6.")
+        elif numero not in lista:
+            lista.append(numero) # Se agrega numero a la lista 
+            i += 1 # Incrementar contador
+        else:
+            print("El numero es repetido, ingrese otro nuevamente.")
+
+    generados = [randint(1,6) for _ in range(3)] # Generar lista de numeros random entre 1 y 6
+    aciertos = 0
+    for numero in lista:
+        if numero in generados:
+            aciertos += 1
+    print ("\nResultados\n")
+    print ("Tus numeros:        ", lista)
+    print ("Numeros generados:  ", generados)
+    print ("Aciertos:                   ", aciertos)
+    match aciertos:
+        case 0:
+            print ("Pierdes tu apuesta:         ",0)
+        case 1:
+            print ("Conservas tu apuesta:       ", apuesta)
+        case 2:
+            print ("Multiplicas tu apuesta (x2):", apuesta*2)
+        case 3:
+            print ("Multiplicas tu apuesta (x3):", apuesta*3)
 
 
 main()
