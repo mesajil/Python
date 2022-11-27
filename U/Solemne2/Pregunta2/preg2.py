@@ -1,17 +1,18 @@
 import random
 from functools import reduce
 
-def generar_listacombinada ():
 
+def main():
+
+    # Inicializamos listas
     animales = ["Perro", "Gato", "Gallina", "Oveja", "Vaca", "Cerdo"]
-    nombres = ["Piggy", "Nerón", "Margarita", "Manchitas", "Mimun", "Carlota"]
-    random.shuffle(nombres)
-    return [[animales[i], nombres[i]] for i in range(len(animales))]
-
-
-def menu():
+    nombres = ["Piggy", "Neron", "Margarita", "Manchitas", "Mimun", "Carlota"]
     
-    print("""
+    # Crear lista combinada
+    random.shuffle(nombres) # Mezclar elementos de la lista de nombres 
+    combinada = [[animales[i], nombres[i]] for i in range(len(animales))] # Combinamos listas
+    
+    menu = """
     OPCIONES
 
     [1] Indicar posicion
@@ -19,51 +20,51 @@ def menu():
     [3] Indicar tipo de mascota a partir de su nombre
     [0] Salir
 
-    """)
-    
-    return input("Ingrese opcion: ")
-
-
-def indicar_posicion (combinada):
-
-    nombre = input("Ingrese nombre: ")
-    nombres = [nombre for _, nombre in combinada]
-    try:
-        index = nombres.index(nombre)
-        print (f"Posicion: {index + 1}")
-    except:
-        print("No se encontro una posicion")
-
-
-def indicar_tipo_nombremaslargo (combinada):
-
-    nombres = [nombre for _, nombre in combinada]
-    nombremaslargo = reduce(lambda x,y: x if len(x) >= len(y) else y, nombres)
-    index = nombres.index(nombremaslargo)
-    print (f"Tipo con nombre con mas letras: {combinada[index][0]}")
-
-
-def indicar_tipo_por_nombre(combinada):
-
-    nombre = input("Ingrese nombre: ")
-    nombres = [nombre for _, nombre in combinada]
-    try:
-        index = nombres.index(nombre)
-        print (f"{nombre} es un(a) {combinada[index][0]}")
-    except:
-        print("No se encontro el tipo de mascota")
-
-
-def main():
-
-    combinada = generar_listacombinada()
+        Ingrese opcion: """
+    print (combinada)
     while (1):
-        opcion = menu()
+        opcion = input(menu)
+        print()
         match opcion:
             case "1": indicar_posicion(combinada)
             case "2": indicar_tipo_nombremaslargo(combinada)
             case "3": indicar_tipo_por_nombre(combinada)
             case "0": break
+
+
+
+def indicar_posicion (combinada):
+    """Indica la posicion de un mascota en la lista combinada
+    para un nombre dado"""
+    
+    nombre = input("Ingrese nombre: ")
+    
+    for i, e in enumerate(combinada):
+        if e[1] == nombre:
+            print (f"Posicion: {i + 1}")
+            break
+    else:
+        print("No se encontro una posicion")
+
+
+def indicar_tipo_nombremaslargo (combinada):
+    """Muestra el tipo de mascota con el nombre mas largo"""
+
+    tipo, _ = reduce(lambda e1,e2: e1 if len(e1[1]) >= len(e2[1]) else e2, combinada)
+    print (f"Tipo con nombre con mas letras: {tipo}")
+
+
+def indicar_tipo_por_nombre(combinada):
+    """Indica el tipo de mascota dado un nombre"""
+
+    nombre = input("Ingrese nombre: ")
+    
+    for tipo, n in combinada:
+        if n == nombre:
+            print (f"{nombre} es un(a) {tipo}")
+            break
+    else:
+        print("No se encontro el tipo de mascota")
 
 
 if __name__ == "__main__":
