@@ -11,3 +11,4 @@ a,b,c,Santiago,Concepción,a,b
 R,R,R,Santiago,Puerto Montt,F,F
 r,r,r,Santiago,Concepción,r,t
 L,M,L,Santiago,Valdivia,L,L
+K,K,K,Santiago,Concepción,K,K
