@@ -46,16 +46,16 @@ def proponer_palabra (nombre):
     print ("\nAhora juega Proponedor:", nombre)
 
     for _ in range(3):
-
         palabra = input ("Ingrese palabra a adivinar: ")
-        if (len(palabra) > 20 or palabra.islower() or palabra.isalpha()):
-            continue
-        return palabra
+        if (len(palabra) <= 20 and palabra.islower() and palabra.isalpha()):
+            return palabra
 
     return '' # Proponedor no logra ingresar una palabra valida
 
 
 def adivinar_palabra (nombre, palabra, intentos):
+    """Ejecuta la etapa de adivinacion y retorna el
+    puntaje obtenido por el adivinador"""
 
     print ("\nAhora juega Adivinador: ", nombre)
 
@@ -83,26 +83,33 @@ def adivinar_palabra (nombre, palabra, intentos):
 
 
 def fase_cierre (nombre1, nombre2, puntaje1, puntaje2):
+    """Imprime al jugador ganador y los puntajes respectivos"""
 
+    # Jugador 1 perdio por no ingresar una palabra correctamente
     if (puntaje1 < 0):
         print ("\nGANADOR: ", nombre2)
         print (f"El jugador {nombre1} no logro ingresar una palabra correctamente.")
         return 
 
+    # Jugador 2 perdio por no ingresar una palabra correctamente
     elif (puntaje2 < 0):
         print ("\nGANADOR: ", nombre1)
         print (f"El jugador {nombre2} no logro ingresar una palabra correctamente.")
         return
 
-    elif (puntaje1 > puntaje2):
+    # Jugador 1 Gano
+    elif (puntaje1 > puntaje2): 
         print ("\nGANADOR: ", nombre1)
 
+    # Jugador 2 Gano
     elif (puntaje1 < puntaje2):
         print ("\nGANADOR: ", nombre2)
-        
+    
+    # Hubo empate
     else:
         print ("\nRESULTADO: EMPATE")
 
+    # Puntajes finales
     print (f"\nPuntaje de {nombre1}: {puntaje1}")
     print (f"Puntaje de {nombre2}: {puntaje2}")
 
