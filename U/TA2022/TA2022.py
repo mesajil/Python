@@ -46,7 +46,7 @@ def evaluar_numeros ():
     i = 0 # Contador
     while (i < cantidad):
         numero = int(input(f"Ingrese numero {i + 1}: "))
-        numero = str(numero) # Los numeros son strings
+        numero = str(numero) # El numero es un string
         if numero not in lista:
             lista.append(numero) # Se agrega numero a la lista 
             i += 1 # Incrementar contador
@@ -83,7 +83,7 @@ def juego_preguntas():
             return self.alternativas[self.respuesta - 1]
     
     print ("Juego de preguntas")
-    preguntas = [] # Lista de objetos Pregunta()
+    preguntas = [] # Lista de preguntas
     preguntas.append(Pregunta(
         "Cuantos litros de sangre tiene una persona adulta?", # Pregunta
         ["Tiene entre 2 y 4 litros", "Tiene entre 4 y 6 litros"], # Lista de alternativas

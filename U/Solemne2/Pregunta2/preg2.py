@@ -8,7 +8,9 @@ def main():
     nombres = ["Piggy", "Neron", "Margarita", "Manchitas", "Mimun", "Carlota"]
     
     # Crear lista combinada
+    random.seed(5) # Definir una sola lista combinada
     random.shuffle(nombres) # Mezclar elementos de la lista de nombres 
+    
     combinada = [[animales[i], nombres[i]] for i in range(len(animales))] # Combinamos listas
     
     menu = """
@@ -20,7 +22,7 @@ def main():
     [0] Salir
 
         Ingrese opcion: """
-    print (combinada)
+    
     while (1):
         opcion = input(menu)
         print()
@@ -38,8 +40,8 @@ def indicar_posicion (combinada):
     
     nombre = input("Ingrese nombre: ")
     
-    for i, e in enumerate(combinada):
-        if e[1] == nombre:
+    for i, elemento in enumerate(combinada):
+        if elemento[1] == nombre:
             print (f"Posicion: {i + 1}")
             break
     else:
