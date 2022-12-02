@@ -131,3 +131,6 @@ dmypy.json
 # Vscode
 
 .vscode/
+
+# Bases de datos
+*.db

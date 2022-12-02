@@ -1,11 +1,13 @@
 import tkinter as tk
+from tkinter import ttk
+from model.model_dao import crear_tabla, borrar_tabla
 
-def main_menu (root):
+def add_top_menu (root):
     main_menu = tk.Menu(root)
     root.config (menu = main_menu) # Agregar menu al root
     menu_inicio = tk.Menu(main_menu, tearoff=0)
-    menu_inicio.add_command (label="Crear Registro en BD")
-    menu_inicio.add_command (label="Eliminar Registro en BD")
+    menu_inicio.add_command (label="Crear Registro en BD", command=crear_tabla)
+    menu_inicio.add_command (label="Eliminar Registro en BD", command=borrar_tabla)
     menu_inicio.add_command (label="Salir", command=root.destroy)
 
     main_menu.add_cascade (label="Inicio", menu=menu_inicio)
@@ -21,6 +23,7 @@ class Frame (tk.Frame):
         self.pack()
         self.config(height=320, width=500)
         self.formulario() # Agregar fomulario
+        self.tabla_peliculas() # Agregar tabla
         self.f_cancelar() # Inicializar campos
 
     def formulario (self):
@@ -73,6 +76,31 @@ class Frame (tk.Frame):
             fg="#DAD5D6", bg="#BD152E", cursor="hand2", activebackground="#E15370")
         self.btn_cancelar.grid (row=3, column=2, padx=10, pady=10)
     
+    def tabla_peliculas (self):
+        
+        # Table
+        
+        self.tabla = ttk.Treeview(self, columns=('Nombre', 'Duracion', 'Genero'))
+        self.tabla.grid (row=4, column=0, columnspan=4)
+
+        self.tabla.heading('#0', text='ID')
+        self.tabla.heading('#1', text='NOMBRE')
+        self.tabla.heading('#2', text='DURACION')
+        self.tabla.heading('#3', text='GENERO')
+
+        self.tabla.insert('', 0, text='1', values=('Los vengadores', '2.35', 'Accion'))
+
+        # Buttons
+
+        self.btn_editar = tk.Button (self, text="Editar")
+        self.btn_editar.config (width=20, font=('Arial', 12, 'bold'),
+            fg="#DAD5D6", bg="#158645", cursor="hand2", activebackground="#35BD6F")
+        self.btn_editar.grid (row=5, column=0, padx=10, pady=10)
+
+        self.btn_eliminar = tk.Button (self, text="Eliminar")
+        self.btn_eliminar.config (width=20, font=('Arial', 12, 'bold'),
+            fg="#DAD5D6", bg="#BD152E", cursor="hand2", activebackground="#E15370")
+        self.btn_eliminar.grid (row=5, column=1, padx=10, pady=10)
     
     def f_nuevo (self):
         
