@@ -2,11 +2,7 @@
 import module
 
 
+with open(r"input.txt", "r") as f:
+    matriz = [line.split("\n")[0].split(",") for line in f]
 
-def main():
-    print(module.pi)
-    print(module.fsum([1,2,3]))
-
-
-if __name__ == '__main__':
-    main()
+print ([[int(e) for e in row] for row in matriz])

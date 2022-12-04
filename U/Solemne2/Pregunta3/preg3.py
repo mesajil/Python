@@ -7,9 +7,18 @@ def main():
     M = int(input("ingrese M de la Matriz: "))
     matriz = [[randint(0,20) for _ in range(M)] for _ in range(N)]
 
-    # Imprimir la matriz con formato
+    # Imprimir la matriz sin corchetes
     print("\nLa matriz es la siguiente:\n")    
-    print("\n".join(["\t".join([str(e) for e in row]) for row in matriz]))
+    # print("\n".join(["\t".join([str(e) for e in row]) for row in matriz])) # Utilizando list comprehension
+    # for row in matriz: # Utilizando condicionales
+    #     for i in range(len(row)):
+    #         if i < len(row) - 1:
+    #             print(row[i], end='\t')
+    #         else:
+    #             print(row[i])
+
+    for row in matriz: # Utilizando join
+        print("\t".join([str(e) for e in row]))
 
     # Guardar la matriz en un archivo externo
     path = rf"matriz_{N}_por_{M}.txt"
