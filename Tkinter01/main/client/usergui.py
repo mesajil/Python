@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import model.model_dao as dao
 from model.model_dao import Pelicula
 
@@ -23,6 +23,7 @@ class Frame (tk.Frame):
         super().__init__(root)
         self.pack()
         self.config(height=320, width=500)
+        self.id_pelicula = None
         self.formulario() # Agregar fomulario
         self.tabla_peliculas() # Agregar tabla
         self.cancelar_registro() # Inicializar campos
@@ -84,7 +85,7 @@ class Frame (tk.Frame):
         # Table
         
         self.tabla = ttk.Treeview(self, columns=('Nombre', 'Duracion', 'Genero'))
-        self.tabla.grid (row=4, column=0, columnspan=4)
+        self.tabla.grid (row=4, column=0, columnspan=4, sticky='nse')
 
         self.tabla.heading('#0', text='ID')
         self.tabla.heading('#1', text='NOMBRE')
@@ -98,6 +99,14 @@ class Frame (tk.Frame):
                 self.tabla.insert('', 0, text=p[0], values=(p[1], p[2], p[3]))
         except:
             print("No hay tabla de peliculas.")
+
+        # Scrollbar
+
+        self.scrollbar = ttk.Scrollbar(self,
+            orient='vertical', command=self.tabla.yview)
+        self.scrollbar.grid(row=4, column=4, sticky='nse')
+        self.tabla.configure(yscrollcommand=self.scrollbar.set)
+
         # Buttons
 
         self.btn_editar = tk.Button (self, text="Editar", command=self.editar_registro)
@@ -142,13 +151,37 @@ class Frame (tk.Frame):
     def guardar_registro (self):
         pelicula = Pelicula (self.SV_nombre.get(),
             self.SV_duracion.get(), self.SV_genero.get())
-        if (dao.guardar_registro (pelicula)):
-            self.tabla_peliculas() # Reiniciar tabla 
+        if (self.id_pelicula == None):
+            if (dao.guardar_registro (pelicula)):
+                self.tabla_peliculas() # Reiniciar tabla
+        else:
+            dao.editar (pelicula, self.id_pelicula)
+            self.id_pelicula = None
+            self.tabla_peliculas() # Reiniciar tabla
         self.cancelar_registro() # Reiniciar campos
 
     
     def editar_registro (self):
-        pass
+        try:
+            self.id_pelicula = self.tabla.item(self.tabla.selection())['text']
+            nombre = self.tabla.item(self.tabla.selection())['values'][0]
+            duracion = self.tabla.item(self.tabla.selection())['values'][1]
+            genero = self.tabla.item(self.tabla.selection())['values'][2]
+            
+            self.SV_nombre.set(nombre)
+            self.SV_duracion.set(duracion)
+            self.SV_genero.set(genero)
+
+            self.entry_nombre.config(state='normal')
+            self.entry_duracion.config(state='normal')
+            self.entry_genero.config(state='normal')
+            self.btn_nuevo.config(state='disabled')
+            self.btn_guardar.config(state='normal')
+            self.btn_cancelar.config(state='normal')
+        except:
+            title = 'Edicion de datos'
+            message = 'Debe elegir una pelicula de la tabla.'
+            messagebox.showerror(title, message)
 
 
     def eliminar_registro (self):

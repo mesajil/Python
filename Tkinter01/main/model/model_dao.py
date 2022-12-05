@@ -83,3 +83,21 @@ def listar_registros ():
         message = 'La tabla peliculas no esta creada en la base de datos.'
         messagebox.showerror(title, message)
     connection.close_connection()
+
+
+def editar (pelicula, id_pelicula):
+    connection = ConnectionDB()
+    sql = f"""
+    UPDATE peliculas
+    SET nombre = '{pelicula.nombre}',
+    duracion = '{pelicula.duracion}',
+    genero = '{pelicula.genero}'
+    WHERE id_pelicula = {id_pelicula}
+    """
+    try:
+        connection.cursor.execute(sql)
+        connection.close_connection()
+    except:
+        title = 'Edicion de datos'
+        message = 'No se ha podido editar el registro.'
+        messagebox.showerror(title, message)
