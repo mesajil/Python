@@ -97,7 +97,30 @@ def editar (pelicula, id_pelicula):
     try:
         connection.cursor.execute(sql)
         connection.close_connection()
+        title = 'Edicion de datos'
+        message = f'La pelicula {id_pelicula} se actualizo con exito.'
+        messagebox.showinfo(title, message)
     except:
         title = 'Edicion de datos'
         message = 'No se ha podido editar el registro.'
         messagebox.showerror(title, message)
+
+
+def eliminar (id_pelicula):
+    connection = ConnectionDB()
+    sql = f"""
+    DELETE FROM peliculas
+    WHERE id_pelicula = {id_pelicula};
+    """
+    try:
+        connection.cursor.execute(sql)
+        connection.close_connection()
+        title = 'Eliminacion de datos'
+        message = f'La pelicula {id_pelicula} has sido eliminada.'
+        messagebox.showinfo(title, message)
+        return True
+    except:
+        title = 'Eliminacion de datos'
+        message = 'No se ha podido eliminar el registro.'
+        messagebox.showerror(title, message)
+        return False

@@ -26,7 +26,7 @@ class Frame (tk.Frame):
         self.id_pelicula = None
         self.formulario() # Agregar fomulario
         self.tabla_peliculas() # Agregar tabla
-        self.cancelar_registro() # Inicializar campos
+        self.reiniciar_campos() # Inicializar campos
 
 
     def formulario (self):
@@ -74,7 +74,7 @@ class Frame (tk.Frame):
             fg="#DAD5D6", bg="#1658A2", cursor="hand2", activebackground="#3586DF")
         self.btn_guardar.grid (row=3, column=1, padx=10, pady=10)
 
-        self.btn_cancelar = tk.Button (self, text="Cancelar", command=self.cancelar_registro)
+        self.btn_cancelar = tk.Button (self, text="Cancelar", command=self.reiniciar_campos)
         self.btn_cancelar.config (width=20, font=('Arial', 12, 'bold'),
             fg="#DAD5D6", bg="#BD152E", cursor="hand2", activebackground="#E15370")
         self.btn_cancelar.grid (row=3, column=2, padx=10, pady=10)
@@ -120,11 +120,13 @@ class Frame (tk.Frame):
         self.btn_eliminar.grid (row=5, column=1, padx=10, pady=10)
     
 
-    def nuevo_registro (self):
-        
-        self.SV_nombre.set('')
-        self.SV_duracion.set('')
-        self.SV_genero.set('')
+    def nuevo_registro (self, nombre='', duracion='', genero=''):
+        """Reinicia los campos entry y se
+        coloca en modo edicion de registro"""
+
+        self.SV_nombre.set(nombre)
+        self.SV_duracion.set(duracion)
+        self.SV_genero.set(genero)
 
         self.entry_nombre.config(state='normal')
         self.entry_duracion.config(state='normal')
@@ -132,10 +134,12 @@ class Frame (tk.Frame):
         self.btn_nuevo.config(state='disabled')
         self.btn_guardar.config(state='normal')
         self.btn_cancelar.config(state='normal')
+        self.btn_editar.config(state='disabled')
+        self.btn_eliminar.config(state='disabled')
 
     
-    def cancelar_registro (self):
-
+    def reiniciar_campos (self):
+        """Se utiliza para reiniciar campos de la aplicacion"""
         self.SV_nombre.set('')
         self.SV_duracion.set('')
         self.SV_genero.set('')
@@ -146,6 +150,10 @@ class Frame (tk.Frame):
         self.btn_nuevo.config(state='normal')
         self.btn_guardar.config(state='disabled')
         self.btn_cancelar.config(state='disabled')
+        self.btn_editar.config(state='normal')
+        self.btn_eliminar.config(state='normal')
+
+        self.id_pelicula = None
         
         
     def guardar_registro (self):
@@ -156,9 +164,9 @@ class Frame (tk.Frame):
                 self.tabla_peliculas() # Reiniciar tabla
         else:
             dao.editar (pelicula, self.id_pelicula)
-            self.id_pelicula = None
             self.tabla_peliculas() # Reiniciar tabla
-        self.cancelar_registro() # Reiniciar campos
+        self.reiniciar_campos() # Reiniciar campos
+        self.id_pelicula = None
 
     
     def editar_registro (self):
@@ -167,17 +175,7 @@ class Frame (tk.Frame):
             nombre = self.tabla.item(self.tabla.selection())['values'][0]
             duracion = self.tabla.item(self.tabla.selection())['values'][1]
             genero = self.tabla.item(self.tabla.selection())['values'][2]
-            
-            self.SV_nombre.set(nombre)
-            self.SV_duracion.set(duracion)
-            self.SV_genero.set(genero)
-
-            self.entry_nombre.config(state='normal')
-            self.entry_duracion.config(state='normal')
-            self.entry_genero.config(state='normal')
-            self.btn_nuevo.config(state='disabled')
-            self.btn_guardar.config(state='normal')
-            self.btn_cancelar.config(state='normal')
+            self.nuevo_registro(nombre, duracion, genero)
         except:
             title = 'Edicion de datos'
             message = 'Debe elegir una pelicula de la tabla.'
@@ -185,7 +183,15 @@ class Frame (tk.Frame):
 
 
     def eliminar_registro (self):
-        pass
+        try:
+            self.id_pelicula = self.tabla.item(self.tabla.selection())['text']
+            dao.eliminar(self.id_pelicula)
+            self.id_pelicula = None
+            self.tabla_peliculas() # Reiniciar tabla
+        except:
+            title = 'Elimninar pelicula'
+            message = 'Debe elegir una pelicula de la tabla.'
+            messagebox.showerror(title, message)
 
 
         
