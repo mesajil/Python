@@ -1,6 +1,15 @@
 from .connection_db import ConnectionDB
 from tkinter import messagebox
 
+
+class Pelicula:
+    def __init__ (self, nombre, duracion, genero):
+        self.id_pelicula = None
+        self.nombre = nombre
+        self.duracion = duracion
+        self.genero = genero
+
+
 def crear_tabla ():
     connection = ConnectionDB()
     sql = """
@@ -39,3 +48,79 @@ def borrar_tabla ():
         message = 'No hay tabla para borrar.'
         messagebox.showerror(title, message)
     connection.close_connection()
+
+
+def guardar_registro (pelicula):
+    connection = ConnectionDB()
+    sql = f"""
+    INSERT INTO peliculas (nombre, duracion, genero)
+    VALUES ('{pelicula.nombre}', '{pelicula.duracion}', '{pelicula.genero}')
+    """
+    title = 'Guardar registro'
+    try:
+        connection.cursor.execute(sql)
+        message = 'Se guardo el registro en la base de datos con exito.'
+        messagebox.showinfo(title, message)
+        connection.close_connection()
+        return True
+    except:
+        message = 'La tabla peliculas no esta creada en la base de datos.'
+        messagebox.showerror(title, message)
+        connection.close_connection()
+        return False
+
+
+def listar_registros ():
+    connection = ConnectionDB()
+    sql = f"""
+    SELECT * FROM peliculas
+    """
+    title = 'Listar registros'
+    try:
+        connection.cursor.execute(sql)
+        return connection.cursor.fetchall()
+    except:
+        message = 'La tabla peliculas no esta creada en la base de datos.'
+        messagebox.showerror(title, message)
+    connection.close_connection()
+
+
+def editar (pelicula, id_pelicula):
+    connection = ConnectionDB()
+    sql = f"""
+    UPDATE peliculas
+    SET nombre = '{pelicula.nombre}',
+    duracion = '{pelicula.duracion}',
+    genero = '{pelicula.genero}'
+    WHERE id_pelicula = {id_pelicula}
+    """
+    try:
+        connection.cursor.execute(sql)
+        connection.close_connection()
+        title = 'Edicion de datos'
+        message = f'La pelicula {id_pelicula} se actualizo con exito.'
+        messagebox.showinfo(title, message)
+    except:
+        title = 'Edicion de datos'
+        message = 'No se ha podido editar el registro.'
+        messagebox.showerror(title, message)
+
+
+def eliminar (id_pelicula):
+    connection = ConnectionDB()
+    sql = f"""
+    DELETE FROM peliculas
+    WHERE id_pelicula = {id_pelicula};
+    """
+    try:
+        connection.cursor.execute(sql)
+        connection.close_connection()
+        title = 'Eliminacion de datos'
+        message = f'La pelicula {id_pelicula} has sido eliminada.'
+        messagebox.showinfo(title, message)
+        return True
+    except:
+        title = 'Eliminacion de datos'
+        message = 'No se ha podido eliminar el registro.'
+        messagebox.showerror(title, message)
+        return False
