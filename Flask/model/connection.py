@@ -11,7 +11,7 @@ class ConnectionDB:
         file_path = r"database/"
         try: os.mkdir(file_path) # Crear directorio
         except FileExistsError: pass
-        self.database = file_path + 'cursos.db'
+        self.database = file_path + 'mk.db'
         self.connection = sqlite3.connect(self.database)
 
 
