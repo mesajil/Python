@@ -1,3 +1,14 @@
+def main():
+    # KD = [0.3, 0.35, 0.45]
+    # KC=[0.5]
+    # D= [300_000, 250_000, 50_000]
+    # C = [100_000]
+    # T = 0.3
+    # x = COSTO_PONDERADO_CAPITAL_DI (KD, KC, D, C, T)
+    x = TASA_MONEDA_DEBIL (15.615/100, 2/100)
+    print (x)
+
+
 def PF (i, n):
     return 1/(1 + i) ** n
 
@@ -12,6 +23,13 @@ def PA_UNIFORME (i, n):
 
 
 def PA_INFINITA (i):
+    """
+    Retorna P (Actualizacion de A)
+    Donde:
+    P: Valor presente de la serie de pagos uniforme
+    A: Monto constante desembolsado en cada periodo
+    i: Tasa de interes del periodo
+    """
     return 1/i
 
 
@@ -45,6 +63,17 @@ def CALENDARIO_AMORTIZACION_CONSTANTE (P, i, n):
     return cuotas
 
 
+def TASA_MONEDA_DEBIL (i, devaluacion):
+    """
+    Retorna la tasa de la moneda debil del periodo equivalente de la moneda fuerte.
+    Donde:
+    i: Tasa de la moneda fuerte del periodo
+    devaluacion: Devaluacion constante de la tasa debil con respecto a la tasa fuerte en cada periodo.
+    """
+    return (1 + i) * (1 + devaluacion) - 1
+
+
+
 def INFLACION (IPC_T, IPC_0):
     """
     Esta funcion retorna INFLACION() utilizando los parametros: IPC_T, IPC_0
@@ -74,7 +103,59 @@ def TASA_REAL (inflacion, P, F):
     TASA_REAL(): Tasa de interes real del periodo
     inflacion: La inflacion del periodo
     P: Monto al inicio del periodo
-    F: onto al final del periodo
+    F: Monto al final del periodo
     """
     return (F/(1 + inflacion) - P)/P
 
+
+def COSTO_ACCIONES_PREFERENTES (D, PC, GE):
+    """
+    Retorna el costo financiero esperado del financiamiento con acciones preferentes.
+    Donde:
+    D: Dividendo del periodo. Por ejemplo: 6% del Valor nominal
+    PC: Precio de colocacion
+    GE: Gastos de emision
+    """
+    return D / (PC - GE)
+
+
+def COSTO_ACCIONES_COMUNES (D, PC, GE, g):
+    """
+    Retorna el costo financiero esperado del financiamiento con acciones comunes.
+    Donde:
+    D: Dividendo esperado del periodo.
+    PC: Precio de colocacion
+    GE: Gastos de emision
+    g: Crecimiento esperado. Por ejemplo: 2%
+    """
+    return D / (PC - GE) + g
+
+
+def COSTO_PONDERADO_CAPITAL_AI (K, Montos):
+    """
+    Retorna el costo ponderado de capital antes de Impuesto a la renta.
+    Donde:
+    K: Lista de tasas de costo efectivo de la deuda o de aporte propio. Por ejemplo: [30%, 35%]
+    Montos: Lista de importes de financiacion con deuda o del aporte propio. Por ejemplo: [30000, 60000]
+    """
+    return sum([K[i] * Montos[i] for i in range(len(K))]) / sum(Montos)
+
+
+def COSTO_PONDERADO_CAPITAL_DI (KD, KC, D, C, T):
+    """
+    Retorna el costo ponderado de capital despues de Impuesto a la renta.
+    Donde:
+    KD: Lista de tasas de costo efectivo de la deuda. Por ejemplo: [30%, 35%]
+    KC: Lista de tasas de costo efectivo del aporte propio. Por ejemplo: [50%]
+    D: Lista de importes de financiacion con deuda. Por ejemplo: [30000, 60000]
+    C: Lista de importes de financiacion del aporte propio. Por ejemplo: [10000]
+    T: Tasa de impuesto a la renta.
+    """
+    temp1 = sum([KD[i] * D[i] * (1 - T) for i in range(len(KD))]) / (sum(D) + sum(C)) 
+    temp2 = sum([KC[i] * C[i] for i in range(len(KC))]) / (sum(D) + sum(C)) 
+    return temp1 + temp2
+
+
+
+if __name__ == "__main__":
+    main()
