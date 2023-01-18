@@ -1,3 +1,5 @@
+import numpy
+
 def main():
     # KD = [0.3, 0.35, 0.45]
     # KC=[0.5]
@@ -5,7 +7,7 @@ def main():
     # C = [100_000]
     # T = 0.3
     # x = COSTO_PONDERADO_CAPITAL_DI (KD, KC, D, C, T)
-    x = TASA_MONEDA_DEBIL (15.615/100, 2/100)
+    x = DEVALUACION_ACUMULADA([0.00575, 0.00286, 0.00570])
     print (x)
 
 
@@ -63,15 +65,35 @@ def CALENDARIO_AMORTIZACION_CONSTANTE (P, i, n):
     return cuotas
 
 
+def DEVALUACION (TC_T, TC_O):
+    """
+    Retorna la devaluacion de la moneda desde 0 a T.
+    Donde
+    TC_T: Tipo de cambio al final
+    TC_O: Tipo de cambio al inicio
+    """
+    return (TC_T - TC_O) / TC_O
+
+
+def DEVALUACION_ACUMULADA (devaluaciones):
+    """
+    Retorna la devaluacion acumulada para una serie
+    de devaluaciones.
+    Donde
+    devaluaciones: devaluaciones acumuladas
+    """
+    return numpy.prod([1 + d for d in devaluaciones]) - 1
+
+
 def TASA_MONEDA_DEBIL (i, devaluacion):
     """
-    Retorna la tasa de la moneda debil del periodo equivalente de la moneda fuerte.
+    Retorna la tasa de la moneda debil
+    cuando la devaluacion es constante.
     Donde:
-    i: Tasa de la moneda fuerte del periodo
-    devaluacion: Devaluacion constante de la tasa debil con respecto a la tasa fuerte en cada periodo.
+    i: Tasa de la moneda fuerte
+    devaluacion: Devaluacion constante.
     """
     return (1 + i) * (1 + devaluacion) - 1
-
 
 
 def INFLACION (IPC_T, IPC_0):
